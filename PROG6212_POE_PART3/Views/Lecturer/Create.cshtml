@@ -1,0 +1,128 @@
+﻿@model PROG6212_POE_PART3.Models.Claim
+
+@{
+    ViewData["Title"] = "Submit Claim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="max-width:700px;margin:40px auto;padding:30px;background:#E8FFD7;border-radius:15px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+    <h2 style="text-align:center;color:#3E5F44;margin-bottom:25px;">
+        Submit a Claim
+    </h2>
+
+    <form asp-action="Create" asp-controller="Lecturer" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom:10px;"></div>
+
+        <!-- Lecturer Name (auto-filled, readonly) -->
+        <div class="mb-3">
+            <label asp-for="LecturerName" class="form-label">Lecturer Name</label>
+            <input asp-for="LecturerName" class="form-control" readonly />
+            <span asp-validation-for="LecturerName" class="text-danger"></span>
+        </div>
+
+        <!-- Hours Worked -->
+        <div class="mb-3">
+            <label asp-for="HoursWorked" class="form-label">Hours Worked</label>
+            <input asp-for="HoursWorked" class="form-control" />
+            <span asp-validation-for="HoursWorked" class="text-danger"></span>
+        </div>
+
+        <!-- Hourly Rate (auto-filled, readonly) -->
+        <div class="mb-3">
+            <label asp-for="HourlyRate" class="form-label">Hourly Rate (R)</label>
+            <input asp-for="HourlyRate" class="form-control" readonly />
+            <span asp-validation-for="HourlyRate" class="text-danger"></span>
+        </div>
+
+        <!-- ✅ Auto-calculated Total Amount -->
+        <div class="mb-3">
+            <label class="form-label">Total Amount (R)</label>
+            <input id="TotalAmount" class="form-control" readonly />
+            <small style="color:#5E936C;">
+                This total is calculated automatically from Hours × Hourly Rate.
+            </small>
+        </div>
+
+        <!-- Notes -->
+        <div class="mb-3">
+            <label asp-for="Notes" class="form-label">Additional Notes</label>
+            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Notes" class="text-danger"></span>
+        </div>
+
+        <!-- Supporting Document -->
+        <div class="mb-3">
+            <label class="form-label">
+                Supporting Document - Optional (.pdf, .docx, .xlsx, Max 5MB)
+            </label>
+            <input type="file" name="supportingDocument" class="form-control" />
+        </div>
+
+        @* Show all model errors (including custom ones from controller) *@
+        @if (ViewData.ModelState.ErrorCount > 0)
+        {
+            <div style="color:red; margin-top:10px;">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+            </div>
+        }
+
+        <button type="submit"
+                style="margin-top:20px;background-color:#93DA97;color:#3E5F44;padding:12px 25px;border:none;border-radius:25px;font-weight:bold;cursor:pointer;">
+            Submit Claim
+        </button>
+
+        <a asp-controller="Lecturer" asp-action="MainDashboard"
+           style="margin-top:20px;margin-left:10px;background-color:#5E936C;color:#fff;padding:12px 25px;border:none;border-radius:25px;font-weight:bold;text-decoration:none;">
+            Cancel
+        </a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        (function () {
+            function updateTotal() {
+                var hoursInput = document.getElementById('HoursWorked');
+                var rateInput = document.getElementById('HourlyRate');
+                var totalInput = document.getElementById('TotalAmount');
+
+                if (!hoursInput || !rateInput || !totalInput) {
+                    return;
+                }
+
+                var hours = parseFloat(hoursInput.value);
+                var rate = parseFloat(rateInput.value);
+
+                if (!isNaN(hours) && !isNaN(rate)) {
+                    var total = hours * rate;
+                    totalInput.value = total.toFixed(2);
+                } else {
+                    totalInput.value = '';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                var hoursInput = document.getElementById('HoursWorked');
+                var rateInput = document.getElementById('HourlyRate');
+
+                if (hoursInput) {
+                    hoursInput.addEventListener('input', updateTotal);
+                    hoursInput.addEventListener('change', updateTotal);
+                }
+
+                if (rateInput) {
+                    rateInput.addEventListener('input', updateTotal);
+                    rateInput.addEventListener('change', updateTotal);
+                }
+
+                // Initialise on load
+                updateTotal();
+            });
+        })();
+    </script>
+}

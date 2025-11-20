@@ -1,50 +1,158 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var currentAction = ViewData["Action"]?.ToString();  
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - PROG6212_POE_PART3</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - CMCS</title>
+
+    <!-- Bootstrap and site CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/PROG6212_POE_PART3.styles.css" asp-append-version="true" />
+
+    <style>
+        /* Ensure full-height layout */
+        html, body {
+            height: 100%;
+        }
+
+        /* Flexbox layout to keep footer at bottom */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1; /* Fill remaining space between header and footer */
+        }
+
+        /* Navbar styling */
+        .navbar-custom {
+            background: linear-gradient(145deg, #3E5F44, #5E936C);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        }
+
+            .navbar-custom .navbar-brand {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #fff !important;
+                text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            }
+
+            /* Navigation links */
+            .navbar-custom .nav-link {
+                background-color: #fff;
+                color: #3E5F44 !important;
+                font-weight: bold;
+                border-radius: 25px;
+                margin: 0 5px;
+                padding: 8px 20px;
+                transition: all 0.3s ease;
+            }
+
+                /* Hover effect for links */
+                .navbar-custom .nav-link:hover {
+                    background-color: #3E5F44;
+                    color: #E8FFD7 !important;
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+                }
+
+                /* Active link styling */
+                .navbar-custom .nav-link.active {
+                    background-color: #3E5F44;
+                    color: #E8FFD7 !important;
+                }
+
+                /* Special styling for Logout link */
+                .navbar-custom .nav-link.text-danger {
+                    background-color: #fff;
+                    color: #d9534f !important;
+                }
+
+                    .navbar-custom .nav-link.text-danger:hover {
+                        background-color: #d9534f;
+                        color: #fff !important;
+                    }
+
+        /* Footer styling */
+        footer {
+            background: linear-gradient(145deg, #5E936C, #3E5F44);
+            color: #fff;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-align: center;
+            padding: 12px 0;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.25);
+        }
+    </style>
 </head>
 <body>
+    <!-- Header with navbar -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-custom">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PROG6212_POE_PART3</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <!-- Brand (logo/title) -->
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">CMCS</a>
+
+                <!-- Right-aligned navigation items -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+
+                        <!-- Display logged in role and user -->
+                        @if (Context.Session.GetString("Username") != null)
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link" style="color:white; font-weight:600;">
+                                    Logged in as: @Context.Session.GetString("Role") (@Context.Session.GetString("Username"))
+                                </span>
+                            </li>
+                        }
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @(ViewData["Title"]?.ToString() == "Welcome" ? "active" : "")"
+                               asp-controller="Home" asp-action="Index">
+                                Home
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                        @* Conditional check to show Logout button only if not on Home/Index page *@
+                        @if (ViewData["Title"]?.ToString() != "Welcome")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" asp-controller="Home" asp-action="Logout">
+                                    Logout
+                                </a>
+                            </li>
+                        }
+
                     </ul>
+
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - PROG6212_POE_PART3 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <!-- Main content placeholder -->
+    <main class="container mt-4">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        CMCS - 2025
     </footer>
+
+    <!-- JS libraries -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Section for page-specific scripts -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
