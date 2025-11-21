@@ -1,0 +1,96 @@
+﻿@model PROG6212_POE_PART3.Models.User
+@{
+    ViewData["Title"] = "Edit User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="max-width:700px;margin:40px auto;padding:30px;background:#E8FFD7;border-radius:15px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+    <h2 style="text-align:center;color:#3E5F44;margin-bottom:25px;">Edit User</h2>
+
+    <form asp-action="EditUser" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label>Username</label>
+            <input asp-for="Username" class="form-control" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Password</label>
+            <input asp-for="Password" class="form-control" type="text" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Role</label>
+            <select asp-for="Role" class="form-control">
+                <option>Lecturer</option>
+                <option>Coordinator</option>
+                <option>Manager</option>
+                <option>HR</option>
+            </select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>First Name</label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Last Name</label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Hourly Rate (for Lecturers only)</label>
+            <input asp-for="HourlyRate" class="form-control" />
+            <span asp-validation-for="HourlyRate" class="text-danger"></span>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;gap:10px;margin-top:20px;">
+            <a href="/HR/ManageUsers" class="action-btn secondary-btn">Cancel</a>
+            <button type="submit" class="action-btn primary-btn">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    .action-btn {
+        padding: 10px 22px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .primary-btn {
+        background-color: #3E5F44;
+        color: #fff;
+    }
+
+    .secondary-btn {
+        background-color: #93DA97;
+        color: #3E5F44;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+</style>

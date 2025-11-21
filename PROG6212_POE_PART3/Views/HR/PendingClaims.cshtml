@@ -1,0 +1,96 @@
+﻿@model List<PROG6212_POE_PART3.Models.Claim>
+
+<div class="green-container">
+    <h2 class="green-title">Pending Claims</h2>
+    <a href="/HR/Index" class="back-btn">← Back to HR Dashboard</a>
+
+    <table class="green-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Lecturer</th>
+                <th>Hours</th>
+                <th>Rate</th>
+                <th>Status</th>
+                <th>Date Submitted</th>
+                <th>Total (R)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model.Where(x => x.Status == "Pending" || x.Status == "Pending (Awaiting Manager)"))
+            {
+                <tr>
+                    <td>@c.Id</td>
+                    <td>@c.LecturerName</td>
+                    <td>@c.HoursWorked</td>
+                    <td>@c.HourlyRate</td>
+                    <td>@c.Status</td>
+                    <td>@c.DateSubmitted.ToShortDateString()</td>
+                    <td>@c.StoredClaimAmount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .green-container {
+        padding: 40px;
+        background: #E8FFD7;
+        min-height: 85vh;
+        border-radius: 16px;
+        max-width: 1200px;
+        margin: auto;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+    }
+
+    .green-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #3E5F44;
+        margin-bottom: 10px;
+    }
+
+    .back-btn {
+        display: inline-block;
+        margin-bottom: 20px;
+        background: #3E5F44;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: .3s;
+    }
+
+        .back-btn:hover {
+            background: #2F4D36;
+            transform: translateY(-3px);
+        }
+
+    .green-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+        .green-table th {
+            padding: 15px;
+            background: #3E5F44;
+            color: white;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .green-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .green-table tr:hover {
+            background: #F2FAEF;
+        }
+</style>

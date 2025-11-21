@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "HR Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="padding:50px;background-color:#E8FFD7;min-height:85vh;">
+    <div style="max-width:1200px;margin:auto;text-align:center;">
+
+        <h2 style="color:#3E5F44;font-size:2.6rem;margin-bottom:10px;">HR Dashboard</h2>
+        <p style="color:#5E936C;font-size:1.15rem;margin-bottom:40px;">
+            Manage users, track claims, and generate lecturer payment reports.
+        </p>
+
+        <!-- DASHBOARD GRID -->
+        <div class="dashboard-grid">
+
+            <!-- TOTAL USERS -->
+            <a href="/HR/AllUsers" class="dashboard-card">
+                <div class="icon-circle">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Total Users</h3>
+                <p>@ViewBag.TotalUsers</p>
+            </a>
+
+            <!-- LECTURERS -->
+            <a href="/HR/LecturerList" class="dashboard-card">
+                <div class="icon-circle" style="background:#A9E6B3;">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3>Lecturers</h3>
+                <p>@ViewBag.TotalLecturers</p>
+            </a>
+
+            <!-- TOTAL CLAIMS -->
+            <a href="/HR/AllClaims" class="dashboard-card">
+                <div class="icon-circle" style="background:#C3F0C6;">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <h3>Total Claims</h3>
+                <p>@ViewBag.TotalClaims</p>
+            </a>
+
+            <!-- PENDING CLAIMS -->
+            <a href="/HR/PendingClaims" class="dashboard-card">
+                <div class="icon-circle" style="background:#F7DFA1;">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+                <h3>Pending Claims</h3>
+                <p>@ViewBag.PendingClaims</p>
+            </a>
+
+            <!-- APPROVED CLAIMS -->
+            <a href="/HR/ApprovedClaims" class="dashboard-card">
+                <div class="icon-circle" style="background:#A0D9AF;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>Approved Claims</h3>
+                <p>@ViewBag.ApprovedClaims</p>
+            </a>
+
+        </div>
+
+        <!-- BUTTONS SECTION -->
+        <div style="margin-top:45px;display:flex;justify-content:center;gap:25px;flex-wrap:wrap;">
+            <a href="/HR/ManageUsers" class="dashboard-btn">Manage Users</a>
+        </div>
+
+    </div>
+</div>
+
+<!-- STYLING -->
+<style>
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 30px;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-card {
+        background: white;
+        padding: 25px 20px;
+        border-radius: 16px;
+        text-decoration: none;
+        color: #3E5F44;
+        box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+        transition: all 0.25s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .dashboard-card h3 {
+            margin-top: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .dashboard-card p {
+            font-size: 2rem;
+            font-weight: 900;
+            margin: 5px 0 0 0;
+        }
+
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #93DA97;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        color: #3E5F44;
+    }
+
+    .dashboard-btn {
+        padding: 14px 32px;
+        border-radius: 25px;
+        background: #3E5F44;
+        color: white;
+        font-weight: bold;
+        font-size: 1rem;
+        text-decoration: none;
+        box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+        transition: 0.3s;
+    }
+
+        .dashboard-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+        }
+
+</style>
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />

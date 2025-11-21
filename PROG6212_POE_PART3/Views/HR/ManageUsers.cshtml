@@ -1,0 +1,116 @@
+﻿@model List<PROG6212_POE_PART3.Models.User>
+@{
+    ViewData["Title"] = "Manage Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="padding:40px;background-color:#E8FFD7;min-height:80vh;max-width:1200px;margin:auto;border-radius:12px;box-shadow:0 6px 15px rgba(0,0,0,0.1);">
+    <h2 style="color:#3E5F44;text-align:center;font-size:2.2rem;margin-bottom:25px;">Manage Users</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div style="background:#D4EDDA;color:#155724;padding:12px;border-radius:6px;text-align:center;margin-bottom:20px;font-weight:bold;">
+            @TempData["Message"]
+        </div>
+    }
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+        <a href="/HR/Index" class="action-btn secondary-btn">← Back to HR Dashboard</a>
+        <a href="/HR/CreateUser" class="action-btn primary-btn">+ Add New User</a>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Hourly Rate</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr>
+                        <td>@u.Username</td>
+                        <td>@u.Role</td>
+                        <td>@u.FirstName @u.LastName</td>
+                        <td>@u.Email</td>
+                        <td>
+                            @(u.Role == "Lecturer" ? $"R {u.HourlyRate}" : "-")
+                        </td>
+                        <td>
+                            <a href="/HR/EditUser/@u.Id" class="action-btn primary-btn">Edit</a>
+                            <a href="/HR/DeleteUser/@u.Id" class="action-btn reject-btn">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .users-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .users-table th {
+            background-color: #3E5F44;
+            color: #ffffff;
+            text-align: left;
+            padding: 12px 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .users-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e1e1e1;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .users-table tr:hover {
+            background-color: #F0FAEC;
+            transition: background 0.2s ease;
+        }
+
+    .action-btn {
+        padding: 6px 14px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        margin-right: 4px;
+    }
+
+    .primary-btn {
+        background-color: #3E5F44;
+        color: #fff;
+    }
+
+    .secondary-btn {
+        background-color: #93DA97;
+        color: #3E5F44;
+    }
+
+    .reject-btn {
+        background-color: #d9534f;
+        color: #fff;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+</style>
