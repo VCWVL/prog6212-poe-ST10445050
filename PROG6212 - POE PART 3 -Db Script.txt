@@ -1,0 +1,71 @@
+-- Use your database
+USE CMCS_Db;
+GO
+
+------------------------------------------------------------
+-- 1. CREATE USERS TABLE 
+------------------------------------------------------------
+
+IF OBJECT_ID('dbo.Users', 'U') IS NOT NULL
+    DROP TABLE dbo.Users;
+GO
+
+CREATE TABLE dbo.Users
+(
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+
+    Username NVARCHAR(50) NOT NULL,
+    Password NVARCHAR(100) NOT NULL,
+
+    Role NVARCHAR(20) NOT NULL DEFAULT 'Lecturer',
+
+    FirstName NVARCHAR(50) NOT NULL,
+    LastName NVARCHAR(50) NOT NULL,
+
+    Email NVARCHAR(100) NOT NULL,
+
+    HourlyRate FLOAT NOT NULL DEFAULT 0
+);
+GO
+
+------------------------------------------------------------
+-- 2. CREATE CLAIMS TABLE 
+------------------------------------------------------------
+
+IF OBJECT_ID('dbo.Claims', 'U') IS NOT NULL
+    DROP TABLE dbo.Claims;
+GO
+
+CREATE TABLE dbo.Claims
+(
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+
+    -- FK to Users
+    LecturerId INT NOT NULL,
+    FOREIGN KEY (LecturerId) REFERENCES dbo.Users(Id),
+
+    LecturerName NVARCHAR(100) NOT NULL,
+
+    HoursWorked FLOAT NOT NULL,
+    HourlyRate FLOAT NOT NULL,
+
+    StoredClaimAmount FLOAT NOT NULL DEFAULT 0,
+
+    Notes NVARCHAR(200) NULL,
+
+    Status NVARCHAR(50) NOT NULL DEFAULT 'Pending',
+
+    DateSubmitted DATETIME NOT NULL DEFAULT GETUTCDATE(),
+
+    SupportingDocument NVARCHAR(255) NULL,
+    OriginalFileName NVARCHAR(255) NULL
+);
+GO
+
+------------------------------------------------------------
+-- 3. SELECT ALL 
+------------------------------------------------------------
+
+SELECT * FROM dbo.Users;
+SELECT * FROM dbo.Claims;
+GO
