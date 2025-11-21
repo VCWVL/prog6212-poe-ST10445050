@@ -1,0 +1,171 @@
+﻿@model List<PROG6212_POE_PART3.Models.Claim>
+
+@{
+    ViewData["Title"] = "Programme Coordinator - Pending Claims";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="padding:40px;background-color:#E8FFD7;min-height:80vh;max-width:1200px;margin:auto;border-radius:12px;box-shadow:0 6px 15px rgba(0,0,0,0.1);">
+    <h2 style="color:#3E5F44;text-align:center;font-size:2.2rem;margin-bottom:25px;">
+        Programme Coordinator - Pending Claims
+    </h2>
+
+    <div style="text-align:center;margin-bottom:35px;">
+        <a asp-controller="Coordinator" asp-action="MainDashboard"
+           style="background-color:#93DA97;color:#3E5F44;padding:12px 30px;border-radius:25px;text-decoration:none;font-weight:bold;font-size:1rem;">
+            ← Back to Main Dashboard
+        </a>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table class="claims-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Lecturer</th>
+                    <th>Hours</th>
+                    <th>Rate</th>
+                    <th>Total</th>
+                    <th>Notes</th>
+                    <th>Document</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var claim in Model)
+                    {
+                        <tr>
+                            <td>@claim.Id</td>
+                            <td>@claim.LecturerName</td>
+                            <td>@claim.HoursWorked</td>
+                            <td>R @claim.HourlyRate</td>
+                            <td>R @claim.ClaimAmount</td>
+                            <td>@claim.Notes</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(claim.SupportingDocument))
+                                {
+                                    <a asp-controller="Lecturer" asp-action="OpenDocument"
+                                       asp-route-id="@claim.Id" target="_blank"
+                                       style="text-decoration:underline;font-weight:bold;color:#3E5F44;">
+                                        @claim.OriginalFileName
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span style="color:#5E936C;">N/A</span>
+                                }
+                            </td>
+                            <td style="display:flex;gap:6px;flex-wrap:wrap;">
+                                @if (!string.IsNullOrEmpty(claim.SupportingDocument))
+                                {
+                                    <a asp-controller="Lecturer" asp-action="Download"
+                                       asp-route-id="@claim.Id" class="action-btn download-btn">
+                                        Download
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span style="color:#888;">—</span>
+                                }
+
+                                <a asp-controller="Coordinator" asp-action="Approve"
+                                   asp-route-id="@claim.Id" class="action-btn approve-btn">
+                                    Approve
+                                </a>
+
+                                <a asp-controller="Coordinator" asp-action="Reject"
+                                   asp-route-id="@claim.Id" class="action-btn reject-btn">
+                                    Reject
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" style="text-align:center; padding:15px; color:#5E936C;">
+                            No pending claims found.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .claims-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .claims-table th {
+            background-color: #3E5F44;
+            color: #ffffff;
+            text-align: left;
+            padding: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .claims-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e1e1e1;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        .claims-table tr:hover {
+            background-color: #F0FAEC;
+            transition: background 0.2s ease;
+        }
+
+    .action-btn {
+        padding: 6px 14px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .approve-btn {
+        background-color: #4CAF50;
+        color: #fff;
+    }
+
+    .reject-btn {
+        background-color: #d9534f;
+        color: #fff;
+    }
+
+    .download-btn {
+        background-color: #3E5F44;
+        color: #fff;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    @@media (max-width: 768px) {
+        .claims-table th,
+        .claims-table td {
+            font-size: 0.9rem;
+            padding: 10px;
+        }
+
+        .action-btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>

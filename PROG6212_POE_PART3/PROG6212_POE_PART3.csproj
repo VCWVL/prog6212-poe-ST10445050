@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Coordinator\" />
     <Folder Include="Views\Manager\" />
     <Folder Include="Views\HR\" />
   </ItemGroup>
