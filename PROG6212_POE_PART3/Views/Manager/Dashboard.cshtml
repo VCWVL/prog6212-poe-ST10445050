@@ -112,7 +112,9 @@
         font-size: 0.95rem;
         transition: all 0.3s ease;
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        margin: 2px;
+        margin: 5px; /* Increased margin to space out buttons more */
+        display: inline-block; /* Ensures buttons are not stacked */
+        width: auto; /* Makes sure the buttons don’t stretch unnecessarily */
     }
 
     .primary-btn {
@@ -167,15 +169,18 @@
         }
 
     @@media (max-width: 768px) {
-        .claims-table th,
-        .claims-table td {
-            font-size: 0.9rem;
-            padding: 10px;
-        }
+        .claims-table th, .claims-table td
 
-        .action-btn {
-            width: 100%;
-            text-align: center;
-        }
+    {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .action-btn {
+        width: 100%; 
+        text-align: center;
+        margin-bottom: 10px; 
+    }
+
     }
 </style>

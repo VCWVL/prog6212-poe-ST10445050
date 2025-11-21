@@ -62,6 +62,29 @@ namespace PROG6212_POE_PART2.Controllers
             return View(claims);
         }
 
+        // GET: Lecturer/Create
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "Home");
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId.Value);
+            if (user == null || user.Role != "Lecturer")
+                return RedirectToAction("Login", "Home");
+
+            var model = new Claim
+            {
+                // Set the lecturer data here
+                LecturerName = $"{user.FirstName} {user.LastName}",
+                HourlyRate = user.HourlyRate
+            };
+
+            return View(model);
+        }
+
+
         // POST: Handle claim submission
         [HttpPost]
         public IActionResult Create(Claim model, IFormFile supportingDocument)

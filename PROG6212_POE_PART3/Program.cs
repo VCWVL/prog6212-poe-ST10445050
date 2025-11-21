@@ -37,16 +37,16 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Ensure database creation and seeding of initial users
+// Ensure database creation and seeding of initial HR user
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();  // Ensure the database is created and migrations are applied
 
-    // Seed default users only if they don't already exist
-    if (!db.Users.Any())
+    // Seed HR user only if they don't already exist
+    if (!db.Users.Any(u => u.Role == "HR"))
     {
-        db.Users.AddRange(
+        db.Users.Add(
             new User
             {
                 Username = "hr1",
@@ -55,36 +55,6 @@ using (var scope = app.Services.CreateScope())
                 FirstName = "Hannah",
                 LastName = "Resources",
                 Email = "hr@cmcs.com",
-                HourlyRate = 0
-            },
-            new User
-            {
-                Username = "lecturer1",
-                Password = "123",
-                Role = "Lecturer",
-                FirstName = "Liam",
-                LastName = "Lecturer",
-                Email = "lecturer1@cmcs.com",
-                HourlyRate = 500
-            },
-            new User
-            {
-                Username = "coordinator1",
-                Password = "123",
-                Role = "Coordinator",
-                FirstName = "Cody",
-                LastName = "Coordinator",
-                Email = "coord1@cmcs.com",
-                HourlyRate = 0
-            },
-            new User
-            {
-                Username = "manager1",
-                Password = "123",
-                Role = "Manager",
-                FirstName = "Maya",
-                LastName = "Manager",
-                Email = "manager1@cmcs.com",
                 HourlyRate = 0
             }
         );
