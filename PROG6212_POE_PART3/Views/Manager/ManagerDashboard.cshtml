@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Academic Manager Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="padding:50px;background-color:#E8FFD7;min-height:80vh;text-align:center;max-width:950px;margin:auto;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,0.1);">
+    <h2 style="color:#3E5F44;font-size:2.4rem;margin-bottom:20px;">
+        Welcome, Academic Manager
+    </h2>
+
+    <p style="color:#5E936C;font-size:1.1rem;margin-bottom:50px;line-height:1.6;">
+        Manage all lecturer claims efficiently. Use the options below to review pending claims or view
+        previously finalised claims.
+    </p>
+
+    <div style="display:flex;justify-content:center;gap:40px;flex-wrap:wrap;">
+        <div class="dashboard-card">
+            <h3 style="color:#3E5F44;margin-bottom:10px;font-size:1.4rem;">📄 View Pending Claims</h3>
+            <p style="color:#5E936C;margin-bottom:25px;font-size:1rem;">
+                Approve or reject pending claims submitted by programme coordinators.
+            </p>
+            <a asp-controller="Manager" asp-action="PendingClaims" class="dashboard-btn">
+                Go to Pending Claims
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3 style="color:#3E5F44;margin-bottom:10px;font-size:1.4rem;">✅ View Verified Claims</h3>
+            <p style="color:#5E936C;margin-bottom:25px;font-size:1rem;">
+                Access claims you have already approved or rejected.
+            </p>
+            <a asp-controller="Manager" asp-action="VerifiedClaims" class="dashboard-btn">
+                Go to Verified Claims
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-card {
+        background-color: #ffffff;
+        padding: 35px 25px;
+        border-radius: 16px;
+        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+        width: 350px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+    .dashboard-btn {
+        display: inline-block;
+        background-color: #3E5F44;
+        color: #fff;
+        padding: 14px 32px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+        .dashboard-btn:hover {
+            background-color: #2F4D36;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+        }
+
+    @@media (max-width: 768px) {
+        .dashboard-card {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .dashboard-btn {
+            width: 100%;
+        }
+    }
+</style>

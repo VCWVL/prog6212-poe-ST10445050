@@ -1,0 +1,167 @@
+﻿@model List<PROG6212_POE_PART3.Models.Claim>
+
+@{
+    ViewData["Title"] = "Verified Claims";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="padding:30px; max-width:1200px; margin:auto; background-color:#E8FFD7; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1);">
+    <h2 style="text-align:center; color:#3E5F44; margin-bottom:25px; font-size:2rem;">
+        Verified Claims (Finalised by Academic Manager)
+    </h2>
+
+    <div style="text-align:center; margin-bottom:25px;">
+        <a asp-controller="Manager" asp-action="ManagerDashboard"
+           class="action-btn secondary-btn">
+            ⬅ Back to Main Dashboard
+        </a>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div style="text-align:center; padding:20px; background:#F1F8F1; border-radius:8px; color:#3E5F44; font-weight:bold;">
+            No verified claims available.
+        </div>
+    }
+    else
+    {
+        <div style="overflow-x:auto;">
+            <table class="claims-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Lecturer</th>
+                        <th>Hours</th>
+                        <th>Rate</th>
+                        <th>Total</th>
+                        <th>Notes</th>
+                        <th>Document</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model)
+                    {
+                        <tr>
+                            <td>@c.Id</td>
+                            <td>@c.LecturerName</td>
+                            <td>@c.HoursWorked</td>
+                            <td>R @c.HourlyRate</td>
+                            <td>R @c.ClaimAmount</td>
+                            <td>@c.Notes</td>
+
+                            <td style="text-align:center;">
+                                @if (!string.IsNullOrEmpty(c.SupportingDocument))
+                                {
+                                    <a asp-controller="Lecturer" asp-action="OpenDocument"
+                                       asp-route-id="@c.Id" target="_blank"
+                                       style="color:#3E5F44; text-decoration:underline; font-weight:bold;">
+                                        @c.OriginalFileName
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span style="color:#5E936C;">N/A</span>
+                                }
+                            </td>
+
+                            <td style="text-align:center; font-weight:bold; color:green;">
+                                Approved
+                            </td>
+
+
+                            <td style="text-align:center;">
+                                <a asp-controller="Manager" asp-action="Details"
+                                   asp-route-id="@c.Id" class="action-btn secondary-btn">
+                                    View
+                                </a>
+                                @if (!string.IsNullOrEmpty(c.SupportingDocument))
+                                {
+                                    <a asp-controller="Lecturer" asp-action="Download"
+                                       asp-route-id="@c.Id" class="action-btn download-btn"
+                                       style="margin-left:5px;">
+                                        Download
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<style>
+    .action-btn {
+        padding: 8px 18px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        margin: 2px;
+    }
+
+    .download-btn {
+        background-color: #3E5F44;
+        color: #fff;
+    }
+
+    .secondary-btn {
+        background-color: #5E936C;
+        color: #fff;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        filter: brightness(1.05);
+    }
+
+    .claims-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        .claims-table th {
+            background-color: #3E5F44;
+            color: #fff;
+            text-align: left;
+            padding: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .claims-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e1e1e1;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        .claims-table tr:hover {
+            background-color: #F0FAEC;
+            transition: background 0.2s ease;
+        }
+
+    @@media (max-width: 768px) {
+        .claims-table th,
+        .claims-table td {
+            font-size: 0.9rem;
+            padding: 10px;
+        }
+
+        .action-btn {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+    }
+</style>
