@@ -1,14 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-
 using PROG6212_POE_PART3.Data;
 using PROG6212_POE_PART3.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// MVC
+// MVC (Add support for controllers and views)
 builder.Services.AddControllersWithViews();
 
-// Session (already used in HomeController)
+// Session configuration for session management
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -16,20 +15,35 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// EF Core with SQL Server Express
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
+// Check if we are in Test environment, and use In-Memory DB for tests
+if (builder.Environment.IsEnvironment("Test"))
+{
+    // Use In-Memory Database for unit tests
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseInMemoryDatabase("TestDatabase"));
+}
+else
+{
+    // Use SQL Server for production
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")
+        ));
+}
+
+// Add controllers and views
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Ensure database exists and seed some default users
+// Ensure database creation and seeding of initial users
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();  // Ensure the database is created and migrations are applied
 
+    // Seed default users only if they don't already exist
     if (!db.Users.Any())
     {
         db.Users.AddRange(
@@ -79,7 +93,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Standard middleware
+// Configure the app for middleware (exception handling, HSTS, HTTPS, etc.)
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -88,12 +102,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseSession();
 app.UseAuthorization();
 
+// Default route configuration
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
