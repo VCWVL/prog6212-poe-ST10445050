@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
 using PROG6212_POE_PART3.Data;
 using PROG6212_POE_PART3.Models;
 using System.IO;
 
-namespace PROG6212_POE_PART3.Controllers
+namespace PROG6212_POE_PART2.Controllers
 {
     public class LecturerController : Controller
     {
@@ -63,28 +62,6 @@ namespace PROG6212_POE_PART3.Controllers
             return View(claims);
         }
 
-        // GET: Show form to create a new claim (auto-fill name + rate)
-        [HttpGet]
-        public IActionResult Create()
-        {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
-                return RedirectToAction("Login", "Home");
-
-            var user = _context.Users.FirstOrDefault(u => u.Id == userId.Value);
-            if (user == null || user.Role != "Lecturer")
-                return RedirectToAction("Login", "Home");
-
-            var model = new Claim
-            {
-                LecturerId = user.Id,
-                LecturerName = $"{user.FirstName} {user.LastName}",
-                HourlyRate = user.HourlyRate
-            };
-
-            return View(model);
-        }
-
         // POST: Handle claim submission
         [HttpPost]
         public IActionResult Create(Claim model, IFormFile supportingDocument)
@@ -102,11 +79,28 @@ namespace PROG6212_POE_PART3.Controllers
             model.LecturerName = $"{user.FirstName} {user.LastName}";
             model.HourlyRate = user.HourlyRate;
 
+            // Validate the model but ignore SupportingDocument field
             if (!ModelState.IsValid)
                 return View(model);
 
             try
             {
+                // Automatic approval logic based on HoursWorked
+                if (model.HoursWorked >= 40 && model.HoursWorked <= 180)
+                {
+                    // Automatically approve if hours are within the range
+                    model.Status = "Approved";
+                }
+                else
+                {
+                    // Otherwise, it goes through the normal approval process
+                    model.Status = "Pending";
+                }
+
+                // Set submission date and calculate the total claim amount
+                model.DateSubmitted = DateTime.UtcNow;
+                model.StoredClaimAmount = model.HoursWorked * model.HourlyRate;
+
                 // Handle supporting document upload if it exists
                 if (supportingDocument != null && supportingDocument.Length > 0)
                 {
@@ -140,11 +134,7 @@ namespace PROG6212_POE_PART3.Controllers
                     model.OriginalFileName = supportingDocument.FileName;
                 }
 
-                // Save claim data
-                model.Status = "Pending";
-                model.DateSubmitted = DateTime.UtcNow;
-                model.StoredClaimAmount = model.HoursWorked * model.HourlyRate;
-
+                // Save claim data to the database
                 _context.Claims.Add(model);
                 _context.SaveChanges();
 
@@ -157,6 +147,7 @@ namespace PROG6212_POE_PART3.Controllers
                 return View(model);
             }
         }
+
 
         // Open supporting document inline (view in browser)
         public IActionResult OpenDocument(int id)
